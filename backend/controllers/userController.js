@@ -188,7 +188,7 @@ const listAppointment = async (req, res) => {
 
     try {
 
-        const { userId } = req.body        // error of req.body req.userId
+        const userId = req.userId
         const appointments = await appointmentModel.find({ userId })
 
         res.json({ success: true, appointments })
@@ -204,10 +204,14 @@ const listAppointment = async (req, res) => {
 const cancelAppointment = async (req, res) => {
     try {
 
-        const { userId } = req.userId
+        const userId = req.userId
         const { appointmentId } = req.body
 
         const appointmentData = await appointmentModel.findById(appointmentId)
+
+        // console.log();
+
+
         if (appointmentData.userId !== userId) {
             return res.json({ success: false, message: 'unathorized access' })
         }
