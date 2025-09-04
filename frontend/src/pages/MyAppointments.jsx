@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { AppContext } from '../context/AppContext'
 import axios from 'axios'
 import { toast } from 'react-toastify'
@@ -7,7 +7,7 @@ const MyAppointments = () => {
 
   const { backendUrl, token, getDoctorsData } = useContext(AppContext)
 
-  const [appointments, setAppointments] = useContext([])
+  const [appointments, setAppointments] = useState([])
 
   const months = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
@@ -22,6 +22,7 @@ const MyAppointments = () => {
     try {
 
       const { data } = await axios.get(backendUrl + '/api/user/appointments', { headers: { token } })
+
       if (data.success) {
         setAppointments(data.appointments.reverse())
         console.log(data.appointments);
@@ -29,7 +30,7 @@ const MyAppointments = () => {
 
     } catch (error) {
       console.log(error);
-      taost.error(error.message)
+      toast.error(error.message)
 
     }
   }
@@ -65,7 +66,7 @@ const MyAppointments = () => {
     <div>
       <p className='pb-3 mt-12 font-medium text-zinc-700 border-b'>My Appointments</p>
       <div className='text-black'>
-        {doctors.slice(0, 3).map((item, index) => (
+        {appointments.map((item, index) => (
           <div className='grid grid-col-[1fr_2fr] gap-4 sm:flex sm:gap-6 py-2 border-b' key={index}>
             <div>
               <img className='w-32 bg-indigo-50' src={item.docData.image} alt="err" />
