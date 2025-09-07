@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const doctorModel = require('../models/doctorModel');
 const appointmentModel = require('../models/appointmentModel');
 const cloudinary = require('cloudinary').v2;
+const razorpay = require('razorpay')
 
 
 //API to register user
@@ -238,6 +239,26 @@ const cancelAppointment = async (req, res) => {
     }
 
 }
+
+// API to make payment using razorpay
+
+// const razorpayInstance = new razorpay({
+//     key_id: process.env.RAZORPAY_KEY_ID,
+//     key_secret: process.env.RAZORPAY_KEY_SECRET
+// })
+
+// const paymentRazorpay = async (req, res) => {
+
+//     try {
+
+
+
+//     } catch (error) {
+//         console.log(error);
+//         res.json({ success: false, message: error.message })
+//     }
+
+// }
 
 
 module.exports = { registerUser, loginUser, getProfile, updateProfile, bookAppointment, listAppointment, cancelAppointment }
