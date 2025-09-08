@@ -210,9 +210,6 @@ const cancelAppointment = async (req, res) => {
 
         const appointmentData = await appointmentModel.findById(appointmentId)
 
-        // console.log();
-
-
         if (appointmentData.userId !== userId) {
             return res.json({ success: false, message: 'unathorized access' })
         }
@@ -242,16 +239,30 @@ const cancelAppointment = async (req, res) => {
 
 // API to make payment using razorpay
 
-// const razorpayInstance = new razorpay({
-//     key_id: process.env.RAZORPAY_KEY_ID,
-//     key_secret: process.env.RAZORPAY_KEY_SECRET
-// })
+const razorpayInstance = new razorpay({
+    key_id: process.env.RAZORPAY_KEY_ID,
+    key_secret: process.env.RAZORPAY_KEY_SECRET
+})
 
 // const paymentRazorpay = async (req, res) => {
 
 //     try {
 
+//         const { appointmentId } = req.body
+//         const appointmentData = await appointmentModel.findById({ appointmentId })
+//         if (!appointmentData || appointmentData.cancelled) {
+//             return res.json({ success: false, message: "Appointment cancelled or not found" })
+//         }
 
+//         // creating option for razorpay payment
+//         const options = {
+//             amount: appointmentData.amount,
+//             currency: process.env.CURRENCY,
+//             receipt: appointmentId,
+//         }
+
+//         const order = razorpayInstance.orders.create(options)
+//         res.json({ success: true, order })
 
 //     } catch (error) {
 //         console.log(error);

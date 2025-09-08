@@ -12,10 +12,6 @@ const AdminContextProvider = (props) => {
     const [appointments, setAppointments] = useState([])
     const [dashData, setDashData] = useState(false)
 
-    // console.log(localStorage.getItem('aToken'));
-
-
-
     const getAllDoctors = async () => {
 
         try {
@@ -53,7 +49,6 @@ const AdminContextProvider = (props) => {
 
             if (data.success) {
                 setAppointments(data.appointments)
-                console.log(data);
 
             } else {
                 toast.error(data.message)
@@ -66,10 +61,11 @@ const AdminContextProvider = (props) => {
 
     const cancelAppointment = async (appointmentId) => {
         try {
-            const { data } = await axios.post(backendUrl + 'api/admin/cancel-appointment', { appointmentId }, { headers: { aToken } })
+            const { data } = await axios.post(backendUrl + '/api/admin/cancel-appointment', { appointmentId }, { headers: { aToken } })
             if (data.success) {
                 toast.success(data.message)
                 getAllAppointments()
+                getDashData()
             } else {
                 toast.error(data.message)
             }

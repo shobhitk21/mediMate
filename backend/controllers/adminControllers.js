@@ -28,6 +28,12 @@ const addDoctor = async (req, res) => {
             return res.json({ success: false, message: "invalid email" })
         }
 
+        // checking email already in use or not
+        const existingEmail = await doctorModel.findOne({ email })
+        if (existingEmail) {
+            return res.json({ success: false, message: 'Email already in use' })
+        }
+
         // validating password
         if (password.length < 8) {
             return res.json({ success: false, message: "password must be greater than 8 characters" })

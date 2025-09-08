@@ -2,11 +2,15 @@ import React, { useContext, useEffect } from 'react'
 import { AdminContext } from '../../context/AdminContext'
 import { AppContext } from '../../context/AppContext'
 import { assets } from '../../assets/assets_admin/assets'
+import { useState } from 'react'
 
 const Dashboard = () => {
 
   const { aToken, getDashData, cancelAppointment, dashData } = useContext(AdminContext)
   const { slotDateFormat } = useContext(AppContext)
+
+  const [confirmId, setConfirmId] = useState(null)
+
 
   useEffect(() => {
     if (aToken) {
@@ -54,7 +58,23 @@ const Dashboard = () => {
                 <p className='text-gray-800 font-medium'>{item.docData.name}</p>
                 <p className='text-gray-600 '>Booking on {slotDateFormat(item.slotDate)}</p>
               </div>
-              {item.cancelled ? <p className='text-red-400 text-xs font-medium'>Cancelled</p> : item.isCompleted ? <p className='text-green-500 text-xs font-medium'>Completed</p> : <img onClick={() => cancelAppointment(item._id)} className='w-10 cursor-pointer' src={assets.cancel_icon} alt="" />}
+              {item.cancelled
+                ? <p className='text-red-400 text-xs font-medium'>Cancelled</p>
+                : item.isCompleted
+                  ? <p className='text-green-500 text-xs font-medium'>Completed</p>
+                  : item.isCompleted
+                    ? <p className='text-green-500 text-xs font-medium'>Completed</p>
+                    : <>
+                      {
+                        confirmId === item._id
+                          ? (<div className='flex gap-2'>
+                            <button className='bg-red-500 text-white px-2 py-1 rounded text-xs sm:text-sm hover:bg-red-600 transition' onClick={() => { cancelAppointment(item._id); setConfirmId(null); }}>Yes</button>
+                            <button className='bg-gray-300 px-2 py-1 rounded text-xs sm:text-sm hover:bg-gray-400 transition' onClick={() => setConfirmId(null)}>No</button>
+                          </div>)
+                          : (<img onClick={() => setConfirmId(item._id)} className='w-10 cursor-pointer' src={assets.cancel_icon} alt="" />)
+                      }
+                    </>
+              }
             </div>
           ))}
         </div>
