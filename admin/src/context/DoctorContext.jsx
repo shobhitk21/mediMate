@@ -71,7 +71,6 @@ const DoctorContextProvider = (props) => {
             if (data.success) {
                 toast.success(data.messsage)
                 setDashData(data.dashData)
-                console.log(data.dashData);
 
             } else {
                 toast.error(data.messsage)
@@ -89,7 +88,6 @@ const DoctorContextProvider = (props) => {
             if (data.success) {
                 toast.success(data.messsage)
                 setProfileData(data.profileData)
-                console.log(data.profileData);
 
             } else {
                 toast.error(data.messsage)

@@ -10,9 +10,13 @@ const appointmentSchema = new mongoose.Schema({
     amount: { type: Number, required: true },
     date: { type: Number, required: true },
     cancelled: { type: Boolean, default: false },
-    payment: { type: Boolean, default: false },
     isCompleted: { type: Boolean, default: false },
-
+    payment: {
+        txnid: { type: String },
+        amount: { type: Number },
+        status: { type: String },
+        mode: { type: String },
+    },
 })
 
 const appointmentModel = mongoose.models.appointment || mongoose.model('appointment', appointmentSchema)

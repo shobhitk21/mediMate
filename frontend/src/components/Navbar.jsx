@@ -3,7 +3,6 @@ import { assets } from '../assets/assets_frontend/assets'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { AppContext } from '../context/AppContext'
 
-
 const Navbar = () => {
 
     const { token, setToken, userData } = useContext(AppContext);
@@ -21,7 +20,7 @@ const Navbar = () => {
 
     return (
         <div className='flex items-center justify-between text-sm py-4 mb-5 border-b border-b-gray-400'>
-            <img onClick={() => navigate('/')} className='w-44 cursor-pointer' src={assets.logo} alt="error" />
+            <img onClick={() => navigate('/')} className='w-44 cursor-pointer' src={assets.Site_full_logo} alt="err" />
             <ul className='hidden md:flex items-start gap-5 font-medium'>
                 <NavLink to={'/'}>
                     <li className='py-1'>Home</li>
@@ -57,10 +56,11 @@ const Navbar = () => {
                         : <button onClick={() => navigate("/login")} className='bg-primary text-white px-8 py-3 rounded-full font-light hidden md:block'>Create account</button>
                 }
                 <img onClick={() => setShowMenu(true)} className='w-6 md:hidden' src={assets.menu_icon} alt="err" />
+
                 {/* ---------mobile menu----------- */}
                 <div className={` ${ShowMenu ? 'fixed w-full' : 'h-0 w-0'} md:hidden top-0 right-0 bottom-0 z-20 overflow-hidden bg-white transition-all`}>
                     <div className='flex items-center justify-between px-5 py-6 '>
-                        <img className='w-36' src={assets.logo} alt="img" />
+                        <img className='w-36' src={assets.m_logo} alt="img" />
                         <img className='w-7' onClick={() => setShowMenu(false)} src={assets.cross_icon} alt="img" />
                     </div>
 

@@ -20,11 +20,7 @@ const Login = () => {
 
 
     const onSubmitHandler = async (event) => {
-        event.preventDefault()
-
-        console.log(backendUrl);
-
-
+        event.preventDefault();
         try {
             if (state === 'Sign Up') {
                 const { data } = await axios.post(backendUrl + '/api/user/register', { name, email, password })

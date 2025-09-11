@@ -25,7 +25,6 @@ const MyAppointments = () => {
 
       if (data.success) {
         setAppointments(data.appointments.reverse())
-        console.log(data.appointments);
       }
 
     } catch (error) {
@@ -52,6 +51,38 @@ const MyAppointments = () => {
       toast.error(error.message)
     }
   }
+
+  const handlePayNow = async (appointmentId) => {
+    try {
+
+      const res = await axios.post(backendUrl + '/api/user/payment/initiate', { appointmentId }, { headers: { token } });
+
+      if (res.data.success) {
+        const { paymentData, action } = res.data;
+
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = action;
+
+        for (const key in paymentData) {
+          const input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = key;
+          input.value = paymentData[key];
+          form.appendChild(input);
+        }
+
+        document.body.appendChild(form);
+        form.submit();
+      } else {
+        toast.error('Payment initiation failed');
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Payment error');
+    }
+  };
+
+
 
   useEffect(() => {
     if (token) {
@@ -82,8 +113,8 @@ const MyAppointments = () => {
             </div>
             <div></div>
             <div className='flex flex-col gap-2 justify-end'>
-              {!item.cancelled && item.payment && !item.isCompleted && <button className='text-sm text-sone-500 text-center sm:mon-w-48 py-2 px-3 cursor-pointer border rounded hover:bg-primary hover:text-white transition-all duration-300'>Paid</button>}
-              {!item.cancelled && !item.payment && !item.isCompleted && <button className='text-sm text-sone-500 text-center sm:mon-w-48 py-2 px-3 cursor-pointer border rounded hover:bg-primary hover:text-white transition-all duration-300'>Pay online</button>}
+              {!item.cancelled && item.payment.status === "success" && !item.isCompleted && <button className='text-sm text-sone-500 text-center sm:mon-w-48 py-2 px-3 cursor-pointer border rounded hover:bg-primary hover:text-white transition-all duration-300'>Paid</button>}
+              {!item.cancelled && item.payment.status === "pending" && !item.isCompleted && <button onClick={() => handlePayNow(item._id)} className='text-sm text-sone-500 text-center sm:mon-w-48 py-2 px-3 cursor-pointer border rounded hover:bg-primary hover:text-white transition-all duration-300'>Pay online</button>}
               {!item.cancelled && !item.isCompleted && <button onClick={() => cancelAppointment(item._id)} className='text-sm text-sone-500 text-center sm:mon-w-48 py-2 px-3 cursor-pointer border rounded hover:bg-red-600 hover:text-white transition-all duration-300'>Cancel appointment</button>}
               {item.cancelled && !item.isCompleted && <button className='min-w-48 py-2 border border-red-500 rounded text-red-500'> Appointment Cancelled </button>}
               {item.isCompleted && <button className='min-w-48 py-2 border border-green-500 rounded text-green-500'> Appointment Completed </button>}
