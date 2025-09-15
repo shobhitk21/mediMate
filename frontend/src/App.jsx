@@ -1,16 +1,16 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
-import About from './pages/About'
-import Contact from './pages/contact'
-import Login from './pages/Login'
-import MyAppointments from './pages/MyAppointments'
-import MyProfile from './pages/MyProfile'
-import Doctors from './pages/Doctors'
-import Appointment from './pages/Appointment'
-import Navbar from './components/Navbar'
-import Footer from './components/Footer'
+import About from './pages/About.jsx'
+import Contact from './pages/contact.jsx'
+import Login from './pages/Login.jsx'
+import MyAppointments from './pages/MyAppointments.jsx'
+import MyProfile from './pages/MyProfile.jsx'
+import Doctors from './pages/Doctors.jsx'
+import Appointment from './pages/Appointment.jsx'
+import Navbar from './components/Navbar.jsx'
+import Footer from './components/Footer.jsx'
 import { ToastContainer, toast } from 'react-toastify';
-import Home from './pages/Home'
+import Home from './pages/Home.jsx'
 
 const App = () => {
   return (
