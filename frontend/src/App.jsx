@@ -1,6 +1,5 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
-import Home from './pages/home'
 import About from './pages/About'
 import Contact from './pages/contact'
 import Login from './pages/Login'
@@ -11,6 +10,7 @@ import Appointment from './pages/Appointment'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import { ToastContainer, toast } from 'react-toastify';
+import Home from './pages/Home'
 
 const App = () => {
   return (
