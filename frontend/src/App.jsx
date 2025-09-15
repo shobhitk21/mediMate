@@ -1,7 +1,7 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import About from './pages/About.jsx'
-import Contact from './pages/contact.jsx'
+import Contact from './pages/Contact.jsx'
 import Login from './pages/Login.jsx'
 import MyAppointments from './pages/MyAppointments.jsx'
 import MyProfile from './pages/MyProfile.jsx'
