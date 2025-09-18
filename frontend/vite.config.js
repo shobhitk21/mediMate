@@ -19,20 +19,25 @@ export default defineConfig({
   server: {
     port: 5173,
     fs: {
-      allow: ['..']  // ✅ allow imports from outside the frontend/ directory
+      allow: ['..']  // allow accessing parent folders
     }
   },
   resolve: {
     alias: {
-      // ✅ Optional alias to make admin imports cleaner
       '@admin': path.resolve(__dirname, '../admin/src')
     }
   },
+  optimizeDeps: {
+    include: ['axios']
+  },
   build: {
     commonjsOptions: {
-      include: [/node_modules/, /admin/]  // ✅ helps rollup resolve external code
+      include: [/node_modules/, /admin/]
+    },
+    rollupOptions: {
+      // leave external empty unless needed
+      external: []
     }
   }
-})
-
+});
 
