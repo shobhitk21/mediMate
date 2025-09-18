@@ -10,6 +10,7 @@ import Appointment from './pages/Appointment.jsx'
 import Navbar from './components/Navbar.jsx'
 import Footer from './components/Footer.jsx'
 import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 import Home from './pages/Home.jsx'
 
 const App = () => {

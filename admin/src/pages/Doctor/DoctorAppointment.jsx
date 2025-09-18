@@ -38,7 +38,7 @@ const DoctorAppointment = () => {
                             </div>
                             <div>
                                 <p className='text-xs inline border border-primary px-2 rounded-full'>
-                                    {item.payment.success ? 'PAID' : 'CASH'}
+                                    {item.payment?.success ? 'PAID' : 'CASH'}
                                 </p>
                             </div>
                             <p className='max-sm:hidden'>{calculateAge(item.userData.dob)}</p>
