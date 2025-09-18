@@ -13,12 +13,13 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import path from 'path'
 
+// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
     port: 5173,
     fs: {
-      allow: ['..']  // allow accessing parent folders
+      allow: ['..'] // allow accessing parent folders if needed
     }
   },
   resolve: {
@@ -34,10 +35,10 @@ export default defineConfig({
       include: [/node_modules/, /admin/]
     },
     rollupOptions: {
-      // leave external empty unless needed
-      external: []
-    }
+      external: [] // add packages here if Netlify build complains about them
+    },
+    outDir: 'dist', // default build output folder for Netlify
+    sourcemap: false
   }
-});
-
+})
 
