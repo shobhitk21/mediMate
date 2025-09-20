@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 import { assets } from '../../assets/assets_admin/assets'
-import { AdminContext } from '../../context/AdminContext'
+import { AdminContext } from '../../context/AdminContext.jsx'
 import { toast } from 'react-toastify'
 import axios from 'axios'
 
@@ -41,15 +41,7 @@ const AddDoctor = () => {
       formData.append('degree', degree)
       formData.append('address', JSON.stringify({ line1: address1, line2: address2 }))
 
-      // console log formdata            
-      // formData.forEach((value, key) => {
-      //   console.log(`${key}: ${value}`);
-      // });
-
-
-      // const { data } = await axios.post(backendUrl + '/api/admin/add-doctor', formData, { headers: { aToken } })
       const { data } = await axios.post(backendUrl + '/api/admin/add-doctor', formData, { headers: { aToken } })
-
 
       if (data.success) {
         toast.success(data.message)

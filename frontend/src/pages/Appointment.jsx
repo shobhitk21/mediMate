@@ -108,14 +108,10 @@ const Appointment = () => {
       }
 
     } catch (error) {
-
       console.log(error);
       toast.error(error.message)
-
     }
-
   }
-
 
   useEffect(() => {
     fetchDocInfo()
@@ -125,9 +121,6 @@ const Appointment = () => {
     getAvailableSlots()
   }, [docInfo])
 
-  // useEffect(() => {
-  //   console.log(docSlots);
-  // }, [docSlots])
 
   return docInfo && (
     <div>

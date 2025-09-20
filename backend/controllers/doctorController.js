@@ -15,7 +15,6 @@ const changeAvailability = async (req, res) => {
         console.log(error);
         res.json({ success: false, message: error.message })
     }
-
 }
 
 const doctorList = async (req, res) => {
@@ -112,7 +111,6 @@ const appointmentCancel = async (req, res) => {
         console.log(error);
         res.json({ success: false, message: error.message })
     }
-
 }
 
 // API to get Dashboard data for doctor panel
@@ -169,7 +167,6 @@ const doctorProfile = async (req, res) => {
         console.log(error);
         res.json({ success: false, message: error.message })
     }
-
 }
 
 // API to update doctor profile for doctor panel
@@ -186,7 +183,6 @@ const updateDoctorProfile = async (req, res) => {
         console.log(error);
         res.json({ success: false, message: error.message })
     }
-
 }
 
 

@@ -1,13 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { DoctorContext } from '../../context/DoctorContext'
-import { AppContext } from '../../context/AppContext'
+import { DoctorContext } from '../../context/DoctorContext.jsx'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 
 const DoctorProfile = () => {
 
     const { dToken, profileData, setProfileData, getProfileData, backendUrl } = useContext(DoctorContext)
-    // const { } = useContext(AppContext)
 
     const [isEdit, setIsEdit] = useState(false)
 
@@ -31,7 +29,6 @@ const DoctorProfile = () => {
             console.log(error);
             toast.error(error.message)
         }
-
     }
 
     useEffect(() => {
