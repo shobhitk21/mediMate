@@ -2,7 +2,6 @@ import React from "react";
 import axios from "axios";
 import { createContext, useState } from "react";
 import { toast } from "react-toastify";
-// import "react-toastify/dist/ReactToastify.css";
 
 export const AdminContext = createContext()
 
