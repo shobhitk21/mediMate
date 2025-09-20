@@ -8,7 +8,7 @@ export default defineConfig({
   tailwindcss()],
   build: {
     rollupOptions: {
-      external: ['axios']
+      external: ['axios', 'react-toastify']
     }
   },
   server: { port: 5173 }
