@@ -6,10 +6,5 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   plugins: [react(),
   tailwindcss()],
-  build: {
-    rollupOptions: {
-      external: ['axios', 'react-toastify']
-    }
-  },
   server: { port: 5173 }
 })
