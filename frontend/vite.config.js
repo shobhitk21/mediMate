@@ -4,10 +4,7 @@ import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  base: './', // super important for static hosting like Vercel
-  optimizeDeps: {
-    include: ["axios"],
-  },
+  base: '/',  
   build: {
     outDir: 'dist',
   },
