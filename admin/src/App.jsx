@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import Login from './pages/Login.jsx';
+import Login from './pages/Login.jsx'
 import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import { AdminContext } from './context/AdminContext.jsx';
@@ -14,7 +14,6 @@ import { DoctorContext } from './context/DoctorContext.jsx';
 import DoctorDashboard from './pages/Doctor/DoctorDashboard.jsx';
 import DoctorAppointment from './pages/Doctor/DoctorAppointment.jsx';
 import DoctorProfile from './pages/Doctor/DoctorProfile.jsx';
-
 
 
 const App = () => {

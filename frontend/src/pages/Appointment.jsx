@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { AppContext } from '../context/AppContext'
+import { AppContext } from '../context/AppContext.jsx'
 import { assets } from '../assets/assets_frontend/assets'
-import RelatedDoctors from '../components/RelatedDoctors'
-import axios from 'axios'
+import RelatedDoctors from '../components/RelatedDoctors.jsx'
+// import axios from 'axios'
+const axios = window.axios;
 import { toast } from 'react-toastify'
 
 const Appointment = () => {

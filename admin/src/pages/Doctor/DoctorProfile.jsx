@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { DoctorContext } from '../../context/DoctorContext.jsx'
-import axios from 'axios'
+// import axios from 'axios'
+const axios = window.axios;
 import { toast } from 'react-toastify'
 
 const DoctorProfile = () => {

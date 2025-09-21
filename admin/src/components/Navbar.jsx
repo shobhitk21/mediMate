@@ -1,7 +1,6 @@
 import React, { useContext } from 'react'
 import { assets } from '../assets/assets_admin/assets'
 import { AdminContext } from '../context/AdminContext'
-import { Navigate } from 'react-router-dom'
 import { DoctorContext } from '../context/DoctorContext'
 
 const Navbar = () => {
@@ -9,7 +8,6 @@ const Navbar = () => {
     const { dToken, setDToken } = useContext(DoctorContext)
 
     const logout = () => {
-        // navigate('/')
         aToken && setAToken('')
         aToken && localStorage.removeItem('aToken')
         dToken && setDToken('')

@@ -1,6 +1,7 @@
 import React from "react";
 import { createContext, useEffect, useState } from "react";
-import axios from "axios";
+// import axios from "axios";
+const axios = window.axios;
 import { toast } from 'react-toastify'
 
 export const AppContext = createContext();

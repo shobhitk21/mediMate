@@ -2,7 +2,8 @@ import React, { useContext, useState } from 'react'
 import { assets } from '../../assets/assets_admin/assets'
 import { AdminContext } from '../../context/AdminContext.jsx'
 import { toast } from 'react-toastify'
-import axios from 'axios'
+// import axios from 'axios'
+const axios = window.axios;
 
 const AddDoctor = () => {
 

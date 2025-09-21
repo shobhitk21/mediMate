@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react'
-import { DoctorContext } from '../../context/DoctorContext'
+import { DoctorContext } from '../../context/DoctorContext.jsx'
 import { assets } from '../../assets/assets_admin/assets'
-import { AppContext } from '../../context/AppContext'
+import { AppContext } from '../../context/AppContext.jsx'
 
 const DoctorAppointment = () => {
     const { dToken, appointments, getAppointments, completeAppointment, cancelAppointment } = useContext(DoctorContext)

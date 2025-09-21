@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { AdminContext } from '../../../admin/src/context/AdminContext'
 import { AppContext } from '../context/AppContext'
-import axios from 'axios'
+// import axios from 'axios'
+const axios = window.axios;
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 

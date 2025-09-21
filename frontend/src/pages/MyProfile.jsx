@@ -1,9 +1,9 @@
 import React, { useContext, useState } from 'react'
-import { AppContext } from '../context/AppContext'
+import { AppContext } from '../context/AppContext.jsx'
 import { assets } from '../assets/assets_frontend/assets'
 import { toast } from 'react-toastify'
-import axios from "axios";
-
+// import axios from "axios";
+const axios = window.axios;
 
 const MyProfile = () => {
 
