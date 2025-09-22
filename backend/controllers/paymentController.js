@@ -1,7 +1,7 @@
 const crypto = require('crypto');
-const appointmentModel = require("../models/appointmentModel");
-const doctorModel = require('../models/doctorModel');
-const userModel = require('../models/userModel');
+const appointmentModel = require("../models/appointmentModel.jsx");
+const doctorModel = require('../models/doctorModel.jsx');
+const userModel = require('../models/userModel.jsx');
 
 
 // --- Hash helpers ---
@@ -21,7 +21,6 @@ const verifyHash = (response, salt) => {
     return calcHash === hash;
 };
 
-// --- Controller: initiatePayment ---
 // --- Controller: initiatePayment ---
 const initiatePayment = async (req, res) => {
     try {
@@ -100,10 +99,10 @@ const initiatePayment = async (req, res) => {
 const paymentCallback = async (req, res) => {
     try {
 
-        console.log("📩 PayU callback received:");
-        console.log("➡️ Method:", req.method);
-        console.log("➡️ Body:", req.body);
-        console.log("➡️ Query:", req.query);
+        console.log("PayU response body:", req.body);
+        console.log("Calculated hash:", calcHash);
+        console.log("Received hash:", response.hash);
+
 
 
         const response = req.body;
