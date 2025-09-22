@@ -23,7 +23,6 @@ const verifyHash = (response, salt) => {
 
 // --- Controller: initiatePayment ---
 const initiatePayment = async (req, res) => {
-    console.log("Initiate Payment Request Body:", req.body);
 
     try {
         const { appointmentId } = req.body;
@@ -102,6 +101,9 @@ const paymentCallback = async (req, res) => {
     try {
 
         const response = req.body;
+        console.log("Payment Callback Response:", response);
+
+        // Verify hash          
         const isValid = verifyHash(response, process.env.PAYU_MERCHANT_SALT);
 
         if (!isValid) {
@@ -126,7 +128,11 @@ const paymentCallback = async (req, res) => {
             );
         }
 
-        // Redirect to frontend        
+        // Redirect to frontend    
+
+        console.log(`${process.env.FRONTEND_URL}/payment-status?status=${response.status}&txnid=${response.txnid}`);
+
+
         res.redirect(`${process.env.FRONTEND_URL}/payment-status?status=${response.status}&txnid=${response.txnid}`);
     } catch (err) {
         console.error(err);
