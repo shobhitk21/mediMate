@@ -85,6 +85,8 @@ const initiatePayment = async (req, res) => {
             service_provider: 'payu_paisa'
         };
 
+        console.log("🚀 Payment request data:", paymentData);
+
         res.json({ success: true, paymentData, action: process.env.PAYU_BASE_URL });
 
     } catch (error) {
