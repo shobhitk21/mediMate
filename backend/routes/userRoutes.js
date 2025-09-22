@@ -17,6 +17,7 @@ userRouter.post('/cancel-appointment', authUser, cancelAppointment)
 // payment routes
 userRouter.post("/payment/initiate", initiatePayment);
 userRouter.post("/payment/callback", paymentCallback);
+userRouter.get("/payment/callback", paymentCallback);
 userRouter.get("/payment/receipt/:txnid", getReceipt);
 
 

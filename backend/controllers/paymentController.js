@@ -104,11 +104,11 @@ const paymentCallback = async (req, res) => {
         console.log("Payment Callback Response:", response);
 
         // Verify hash          
-        const isValid = verifyHash(response, process.env.PAYU_MERCHANT_SALT);
+        // const isValid = verifyHash(response, process.env.PAYU_MERCHANT_SALT);
 
-        if (!isValid) {
-            return res.status(400).send('Invalid transaction hash');
-        }
+        // if (!isValid) {
+        //     return res.status(400).send('Invalid transaction hash');
+        // }
 
         if (response.status === 'success') {
             await appointmentModel.findOneAndUpdate(
