@@ -134,8 +134,9 @@ const paymentCallback = async (req, res) => {
 
         console.log(`${process.env.FRONTEND_URL}/payment-status?status=${response.status}&txnid=${response.txnid}`);
 
+        // res.redirect(`${process.env.FRONTEND_URL}/payment-status?status=${response.status}&txnid=${response.txnid}`);
+        res.status(200).send(`<html><head><meta http-equiv="refresh" content="0;url=${process.env.FRONTEND_URL}/payment-status?status=${response.status}&txnid=${response.txnid}" /></head><body>Redirecting...</body></html>`);
 
-        res.redirect(`${process.env.FRONTEND_URL}/payment-status?status=${response.status}&txnid=${response.txnid}`);
     } catch (err) {
         console.error(err);
         res.status(500).send('Error processing payment callback');
