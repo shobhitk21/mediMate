@@ -24,7 +24,7 @@ const verifyHash = (response, salt) => {
 // --- Controller: initiatePayment ---
 const initiatePayment = async (req, res) => {
     console.log("Initiate Payment Request Body:", req.body);
-    
+
     try {
         const { appointmentId } = req.body;
 
@@ -101,11 +101,6 @@ const initiatePayment = async (req, res) => {
 const paymentCallback = async (req, res) => {
     try {
 
-        console.log("PayU response body:", req.body);
-        console.log("Calculated hash:", calcHash);
-        console.log("Received hash:", response.hash);
-
-
         const response = req.body;
         const isValid = verifyHash(response, process.env.PAYU_MERCHANT_SALT);
 
@@ -131,7 +126,7 @@ const paymentCallback = async (req, res) => {
             );
         }
 
-        // Redirect to frontend
+        // Redirect to frontend        
         res.redirect(`${process.env.FRONTEND_URL}/payment-status?status=${response.status}&txnid=${response.txnid}`);
     } catch (err) {
         console.error(err);
