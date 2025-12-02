@@ -71,7 +71,9 @@ const Dashboard = () => {
                             <button className='bg-red-500 text-white px-2 py-1 rounded text-xs sm:text-sm hover:bg-red-600 transition' onClick={() => { cancelAppointment(item._id); setConfirmId(null); }}>Yes</button>
                             <button className='bg-gray-300 px-2 py-1 rounded text-xs sm:text-sm hover:bg-gray-400 transition' onClick={() => setConfirmId(null)}>No</button>
                           </div>)
-                          : (<img onClick={() => setConfirmId(item._id)} className='w-10 cursor-pointer' src={assets.cancel_icon} alt="" />)
+                          : item.isPayed
+                            ? <p className='text-green-500 text-sm'>Paid</p>
+                            : (<img onClick={() => setConfirmId(item._id)} className='w-10 cursor-pointer' src={assets.cancel_icon} alt="" />)
                       }
                     </>
               }

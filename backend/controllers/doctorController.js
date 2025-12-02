@@ -153,7 +153,6 @@ const doctorDashboard = async (req, res) => {
 }
 
 // API to get doctor profile for doctor panel
-
 const doctorProfile = async (req, res) => {
     try {
 

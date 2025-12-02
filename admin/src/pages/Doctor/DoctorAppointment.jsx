@@ -36,20 +36,22 @@ const DoctorAppointment = () => {
                             </div>
                             <div>
                                 <p className='text-xs inline border border-primary px-2 rounded-full'>
-                                    {item.payment?.success ? 'PAID' : 'CASH'}
+                                    {item.isPayed ? 'PAID' : 'CASH'}
                                 </p>
                             </div>
                             <p className='max-sm:hidden'>{calculateAge(item.userData.dob)}</p>
                             <p>{slotDateFormat(item.slotDate)}, {item.slotTime}</p>
-                            <p>${item.amount}</p>
+                            <p>₹{item.amount}</p>
                             {item.cancelled
                                 ? <p className='text-red-400 text-xs font-medium'>Cancelled</p>
                                 : item.isCompleted
                                     ? <p className='text-green-500 text-xs font-medium'>Completed</p>
-                                    : <div className='flex'>
-                                        <img onClick={() => cancelAppointment(item._id)} className='w-10 cursor-pointer' src={assets.cancel_icon} alt="" />
-                                        <img onClick={() => completeAppointment(item._id)} className='w-10 cursor-pointer' src={assets.tick_icon} alt="" />
-                                    </div>
+                                    : item.isPayed
+                                        ? <img onClick={() => completeAppointment(item._id)} className='w-10 cursor-pointer' src={assets.tick_icon} alt="" />
+                                        : <div className='flex'>
+                                            <img onClick={() => cancelAppointment(item._id)} className='w-10 cursor-pointer' src={assets.cancel_icon} alt="" />
+                                            <img onClick={() => completeAppointment(item._id)} className='w-10 cursor-pointer' src={assets.tick_icon} alt="" />
+                                        </div>
                             }
                         </div>
                     ))

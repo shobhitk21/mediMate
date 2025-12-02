@@ -29,12 +29,6 @@ app.use('/api/doctor', doctorRouter)
 app.use('/api/user', userRouter)
 
 
-
-app.get('/', (req, res) => {
-    res.send('hello')
-})
-
-
 app.listen(PORT, () => {
     console.log('server started!!');
 })

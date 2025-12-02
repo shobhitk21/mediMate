@@ -1,185 +1,77 @@
-const crypto = require('crypto');
-const appointmentModel = require("../models/appointmentModel.js");
-const doctorModel = require('../models/doctorModel.js');
-const userModel = require('../models/userModel.js');
+const Razorpay = require('razorpay');
+const crypto = require("crypto");
+const appointmentModel = require('../models/appointmentModel');
+
+let razorpayInstance = new Razorpay({
+    key_id: process.env.RAZORPAY_KEY_ID,
+    key_secret: process.env.RAZORPAY_KEY_SECRET,
+});
 
 
-// --- Hash helpers ---
-const generateHash = ({ key, txnid, amount, productinfo, firstname, email, salt }) => {
-    const str = `${key}|${txnid}|${amount}|${productinfo}|${firstname}|${email}|||||||||||${salt}`;
-    return crypto.createHash('sha512').update(str).digest('hex');
-};
-
-const verifyHash = (response, salt) => {
-    const {
-        key, txnid, amount, productinfo, firstname, email, status, hash
-    } = response;
-
-    const hashStr = `${salt}|${status}|||||||||||${email}|${firstname}|${productinfo}|${amount}|${txnid}|${key}`;
-    const calcHash = crypto.createHash('sha512').update(hashStr).digest('hex');
-
-    return calcHash === hash;
-};
-
-// --- Controller: initiatePayment ---
-const initiatePayment = async (req, res) => {
-
+const createOrder = async (req, res) => {
     try {
         const { appointmentId } = req.body;
 
-        // Get appointment
         const appointment = await appointmentModel.findById(appointmentId);
 
-        if (!appointment) {
-            return res.status(400).json({ success: false, message: 'Appointment not found' });
-        }
-        if (appointment.cancelled) {
-            return res.status(400).json({ success: false, message: 'Appointment is cancelled' });
-        }
-        if (appointment.payment.status === "success" && appointment.payment.txnid) {
-            return res.status(400).json({ success: false, message: 'Appointment already paid' });
-        }
-
-        // Fetch user
-        const user = await userModel.findById(appointment.userId).select("name email phone");
-
-        // Fetch doctor
-        const doctor = await doctorModel.findById(appointment.docId);
-
-        const amount = doctor.fees.toFixed(2);
-        const txnid = 'TXN' + Date.now();
-        const productinfo = `Consultation with Dr. ${doctor.name}`;
-        const firstname = user.name;
-        const email = user.email;
-        const phone = user.phone;
-
-        // 🔹 Save txnid in appointment (status = pending)
-        appointment.payment = {
-            txnid,
-            amount,
-            status: "pending"
+        const options = {
+            amount: appointment.amount * 100,
+            currency: process.env.currency || "INR",
         };
-        await appointment.save();
 
-        const hash = generateHash({
-            key: process.env.PAYU_MERCHANT_KEY,
-            txnid,
-            amount,
-            productinfo,
-            firstname,
-            email,
-            salt: process.env.PAYU_MERCHANT_SALT
+        const order = await razorpayInstance.orders.create(options);
+
+        await appointmentModel.findByIdAndUpdate(appointment._id, {
+            razorpayOrderId: order.id,
+            paymentStatus: "created",
         });
 
-        const paymentData = {
-            key: process.env.PAYU_MERCHANT_KEY,
-            txnid,
-            amount,
-            productinfo,
-            firstname,
-            email,
-            phone,
-            surl: `${process.env.BACKEND_URL}/api/user/payment/callback`,
-            furl: `${process.env.BACKEND_URL}/api/user/payment/callback`,
-            hash,
-            service_provider: 'payu_paisa'
-        };
-
-        console.log("🚀 Payment request data:", paymentData);
-
-        res.json({ success: true, paymentData, action: process.env.PAYU_BASE_URL });
-
+        res.status(200).json(order);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ success: false, message: 'Payment initiation failed' });
+        res.status(500).send("Error creating RazorPay order");
     }
 };
 
-
-
-
-// --- Controller: paymentCallback ---
-const paymentCallback = async (req, res) => {
+const verifyPayment = async (req, res) => {
     try {
+        const {
+            razorpay_order_id,
+            razorpay_payment_id,
+            razorpay_signature,
+            appointmentId,
+        } = req.body;
 
-        const response = req.body;
-        console.log("Payment Callback Response:", response);
+        // Step 1: generate signature
+        const generated_signature = crypto
+            .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+            .update(razorpay_order_id + "|" + razorpay_payment_id)
+            .digest("hex");
 
-        // Verify hash          
-        // const isValid = verifyHash(response, process.env.PAYU_MERCHANT_SALT);
-
-        // if (!isValid) {
-        //     return res.status(400).send('Invalid transaction hash');
-        // }
-
-        if (response.status === 'success') {
-            await appointmentModel.findOneAndUpdate(
-                { "payment.txnid": response.txnid },   //  match by txnid
-                {
-                    $set: {
-                        "payment.amount": response.amount,
-                        "payment.status": response.status,
-                        "payment.mode": response.mode,
-                    }
-                }
-            );
-        } else {
-            await appointmentModel.findOneAndUpdate(
-                { "payment.txnid": response.txnid },
-                { $set: { "payment.status": response.status } }
-            );
+        // Step 2: compare signature
+        if (generated_signature !== razorpay_signature) {
+            return res.status(400).json({ success: false, message: "Invalid payment signature" });
         }
 
-        // Redirect to frontend    
-
-        console.log(`${process.env.FRONTEND_URL}/payment-status?status=${response.status}&txnid=${response.txnid}`);
-
-        // res.redirect(`${process.env.FRONTEND_URL}/payment-status?status=${response.status}&txnid=${response.txnid}`);
-        res.status(200).send(`<html><head><meta http-equiv="refresh" content="0;url=${process.env.FRONTEND_URL}/payment-status?status=${response.status}&txnid=${response.txnid}" /></head><body>Redirecting...</body></html>`);
-
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('Error processing payment callback');
-    }
-};
-
-
-// --- Controller: getReceipt ---
-
-const getReceipt = async (req, res) => {
-    try {
-        const txnid = req.params.txnid;
-
-        const appointment = await appointmentModel.findOne({ "payment.txnid": txnid });
-        if (!appointment || !appointment.payment) {
-            return res.status(404).json({ success: false, message: 'Payment not found' });
-        }
-
-        const doctor = await doctorModel.findById(appointment.docId);
-        const user = await userModel.findById(appointment.userId);
-
-        res.json({
-            success: true,
-            receipt: {
-                txnid: appointment.payment.txnid,
-                doctor: doctor?.name || 'N/A',
-                patient: user?.name || 'N/A',
-                amount: appointment.payment.amount,
-                mode: appointment.payment.mode,
-                status: appointment.payment.status,
-                date: appointment.createdAt,
-            }
+        // Step 3: update DB
+        await appointmentModel.findByIdAndUpdate(appointmentId, {
+            isPayed: true,
+            razorpayOrderId: razorpay_order_id,
         });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ success: false, message: 'Failed to fetch receipt' });
+
+        return res.status(200).json({
+            success: true,
+            message: "Payment verified successfully",
+        });
+
+    } catch (error) {
+        console.log("Verify error:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Payment verification failed",
+        });
     }
 };
 
 
-// --- Export all ---
-module.exports = {
-    initiatePayment,
-    paymentCallback,
-    getReceipt
-};
+module.exports = { createOrder, verifyPayment };

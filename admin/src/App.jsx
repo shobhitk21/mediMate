@@ -29,7 +29,7 @@ const App = () => {
         <Sidebar />
         <Routes>
           {/* admin routes */}
-          <Route path='/' element={<></>} />
+          <Route path='/' element={<Dashboard />} />
           <Route path='/admin-dashboard' element={<Dashboard />} />
           <Route path='/all-appointments' element={<AllAppointments />} />
           <Route path='/add-doctor' element={<AddDoctor />} />
@@ -39,18 +39,14 @@ const App = () => {
           <Route path='/doctor-dashboard' element={<DoctorDashboard />} />
           <Route path='/doctor-appointments' element={<DoctorAppointment />} />
           <Route path='/doctor-profile' element={<DoctorProfile />} />
-
-
         </Routes>
       </div>
 
     </div>
   ) : (
     <>
-
       <Login />
       <ToastContainer />
-
     </>
   )
 }
