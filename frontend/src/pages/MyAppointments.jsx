@@ -2,12 +2,16 @@ import React, { useContext, useEffect, useState } from 'react'
 import { AppContext } from '../context/AppContext.jsx'
 const axios = window.axios;
 import { toast } from 'react-toastify'
+import { ClipLoader } from 'react-spinners';
+
 
 const MyAppointments = () => {
 
-  const { backendUrl, token, getDoctorsData } = useContext(AppContext)
 
+  const { backendUrl, token, getDoctorsData } = useContext(AppContext)
   const [appointments, setAppointments] = useState([])
+  const [loading, setLoading] = useState(false)
+
 
   const months = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
@@ -45,46 +49,15 @@ const MyAppointments = () => {
       } else {
         toast.error(data.message)
       }
-
     } catch (error) {
       console.log(error);
       toast.error(error.message)
     }
   }
 
-  // const handlePayNow = async (appointmentId) => {
-  //   try {
-
-  //     const res = await axios.post(backendUrl + '/api/user/payment/create-order', { appointmentId }, { headers: { token } });
-
-  //     if (res.data.success) {
-  //       const { paymentData, action } = res.data;
-
-  //       const form = document.createElement('form');
-  //       form.method = 'POST';
-  //       form.action = action;
-
-  //       for (const key in paymentData) {
-  //         const input = document.createElement('input');
-  //         input.type = 'hidden';
-  //         input.name = key;
-  //         input.value = paymentData[key];
-  //         form.appendChild(input);
-  //       }
-
-  //       document.body.appendChild(form);
-  //       form.submit();
-  //     } else {
-  //       toast.error('Payment initiation failed');
-  //     }
-  //   } catch (err) {
-  //     toast.error(err.response?.data?.message || 'Payment error');
-  //   }
-  // };
-
   const handlePayment = async (appointmentId) => {
+    setLoading(true)
     try {
-      // Create order via backend
       const response = await axios.post(backendUrl + '/api/user/payment/create-order', { appointmentId }, { headers: { token } });
       console.log(response.data)
 
@@ -106,11 +79,12 @@ const MyAppointments = () => {
               razorpay_signature: response.razorpay_signature,
               appointmentId,
             })
-            console.log(data);
+            setLoading(false)
 
           } catch (error) {
             console.log(error)
             toast.error(error?.response?.data?.message)
+            setLoading(false)
           }
         }
       };
@@ -119,8 +93,9 @@ const MyAppointments = () => {
       paymentObject.open();
     } catch (error) {
       console.error('Payment initiation failed:', error);
+      setLoading(false)
     }
-
+    setLoading(false)
   }
 
   useEffect(() => {
@@ -156,8 +131,7 @@ const MyAppointments = () => {
             <div></div>
             <div className='flex flex-col gap-2 justify-end'>
               {!item.cancelled && item.isPayed && !item.isCompleted && <button className='min-w-48 py-2 border border-green-500 rounded text-green-500'>Paid</button>}
-              {!item.cancelled && !item.isPayed && !item.isCompleted && <button onClick={() => handlePayment(item._id)} className='text-sm text-sone-500 text-center sm:mon-w-48 py-2 px-3 cursor-pointer border rounded hover:bg-primary hover:text-white transition-all duration-300'>Pay online</button>}
-              {/* {!item.cancelled && !item.isPayed && !item.isCompleted && <button onClick={() => handlePayment(item._id)} className='text-sm text-sone-500 text-center sm:mon-w-48 py-2 px-3 cursor-pointer border rounded hover:bg-primary hover:text-white transition-all duration-300'>Pay online</button>} */}
+              {!item.cancelled && !item.isPayed && !item.isCompleted && <button onClick={() => handlePayment(item._id)} className='text-sm text-sone-500 text-center sm:mon-w-48 py-2 px-3 cursor-pointer border rounded hover:bg-primary hover:text-white transition-all duration-300'> {loading ? <ClipLoader size={20} /> : "Pay online"}</button>}
               {!item.cancelled && !item.isPayed && !item.isCompleted && <button onClick={() => cancelAppointment(item._id)} className='text-sm text-sone-500 text-center sm:mon-w-48 py-2 px-3 cursor-pointer border rounded hover:bg-red-600 hover:text-white transition-all duration-300'>Cancel appointment</button>}
               {item.cancelled && !item.isCompleted && <button className='min-w-48 py-2 border border-red-500 rounded text-red-500'> Appointment Cancelled </button>}
               {item.isCompleted && <button className='min-w-48 py-2 border border-green-500 rounded text-green-500'> Appointment Completed </button>}

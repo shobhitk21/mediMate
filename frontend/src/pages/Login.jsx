@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { AppContext } from '../context/AppContext'
-// import axios from 'axios'
+import { ClipLoader } from 'react-spinners';
 const axios = window.axios;
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
@@ -16,10 +16,12 @@ const Login = () => {
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [loading, setLoading] = useState(false)
 
 
 
     const onSubmitHandler = async (event) => {
+        setLoading(true)
         event.preventDefault();
         try {
             if (state === 'Sign Up') {
@@ -40,8 +42,10 @@ const Login = () => {
                     toast.error(data.message)
                 }
             }
+            setLoading(false)
         } catch (error) {
             toast.error(error.message)
+            setLoading(false)
         }
     }
 
@@ -77,7 +81,7 @@ const Login = () => {
                     <input className='border border-zinc-300 rounded w-full p-2 mt-1' type="text" onChange={(e) => setPassword(e.target.value)} value={password} required />
                 </div>
 
-                <button type='submit' className='bg-primary text-white w-full py-2 rounded-md text-base'>{state === 'Sign Up' ? "Create Account" : "Login"}</button>
+                <button type='submit' className='bg-primary text-white w-full py-2 rounded-md text-base cursor-pointer'> {loading ? <ClipLoader size={20} /> : state === 'Sign Up' ? "Create Account" : "Login"}</button>
                 {
                     (state === 'Sign Up')
                         ? <p>Already have an account? <span onClick={() => setState('Login')} className='text-primary underline cursor-pointer'>Login here</span> </p>

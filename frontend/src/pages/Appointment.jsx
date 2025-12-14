@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { AppContext } from '../context/AppContext.jsx'
 import { assets } from '../assets/assets_frontend/assets'
 import RelatedDoctors from '../components/RelatedDoctors.jsx'
-// import axios from 'axios'
+import { ClipLoader } from 'react-spinners';
 const axios = window.axios;
 import { toast } from 'react-toastify'
 
@@ -19,6 +19,8 @@ const Appointment = () => {
   const [docSlots, setDocSlots] = useState([])
   const [slotIndex, setSlotIndex] = useState(0)
   const [slotTime, setSlotTime] = useState('')
+  const [loading, setLoading] = useState(false)
+
 
   async function fetchDocInfo() {
     const docInfo = await doctors.find(doc => doc._id === docId)
@@ -82,7 +84,7 @@ const Appointment = () => {
   }
 
   const bookAppointment = async () => {
-
+    setLoading(true)
     if (!token) {
       toast.warn('Login to book appointment')
       return navigate('/login')
@@ -104,13 +106,16 @@ const Appointment = () => {
         toast.success(data.message)
         getDoctorsData()
         navigate('/my-appointments')
+        setLoading(false)
       } else {
         toast.error(data.message)
+        setLoading(false)
       }
 
     } catch (error) {
       console.log(error);
       toast.error(error.message)
+      setLoading(false)
     }
   }
 
@@ -180,7 +185,7 @@ const Appointment = () => {
             </p>
           ))}
         </div>
-        <button onClick={bookAppointment} className='bg-primary text-white text-sm font-light px-14 py-3 rounded-full my-6 cursor-pointer'>Book an Appointment </button>
+        <button onClick={bookAppointment} className='bg-primary text-white text-sm font-light px-14 py-3 rounded-full my-6 cursor-pointer'> {loading ? <ClipLoader size={20} /> : "Book an Appointment"} </button>
       </div>
 
       {/* ------ listing related doctors */}
